@@ -21,10 +21,10 @@ $(function() {
          * and that the URL is not empty.
          */
          it('URL defined', function() {
-           allFeeds.forEach(function(val) {
-             expect(val.url).toBeDefined();
-             expect(val.url).not.toBe(0);
-           });
+             allFeeds.forEach(function(val) {
+                 expect(val.url).toBeDefined();
+                 expect(val.url).not.toBe(0);
+             });
          });
 
         /* loops through each feed
@@ -32,10 +32,10 @@ $(function() {
          * and that the name is not empty.
          */
          it('name defined', function() {
-           allFeeds.forEach(function(val) {
-             expect(val.name).toBeDefined();
-             expect(val.name).not.toBe(0);
-           });
+             allFeeds.forEach(function(val) {
+                 expect(val.name).toBeDefined();
+                 expect(val.name).not.toBe(0);
+             });
          });
     });
 
@@ -49,8 +49,8 @@ $(function() {
          */
 
          it('element hidden', function() {
-           const menuHidden = document.querySelector('body');
-           expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
+             const menuHidden = document.querySelector('body');
+             expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
          });
 
          /* test that ensures the menu changes
@@ -62,13 +62,13 @@ $(function() {
               const menuHidden = document.querySelector('body');
               let clicked = 1;
               menuHidden.addEventListener('click', function() {
-                clicked++;
+                  clicked++;
               });
               if (clicked % 2 === 0) {
-                expect(menuHidden.getAttribute('class')).not.toBe('menu-hidden');
+                  expect(menuHidden.getAttribute('class')).not.toBe('menu-hidden');
               }
               else {
-               expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
+                  expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
               }
           })
     });
@@ -84,13 +84,13 @@ $(function() {
          const entry = feedcontainer.firstElementChild;
 
          beforeEach(function(done) {
-           loadFeed(0, function() {
-               done();
-           });
+              loadFeed(0, function() {
+                    done();
+              });
          });
          it('Async loadFeed has at least one entry', function(done) {
-            expect(entry).toBeDefined();
-            done();
+              expect(entry).toBeDefined();
+              done();
          });
 
     });
@@ -107,17 +107,17 @@ $(function() {
          let i = 0;
 
          beforeEach(function(done) {
-           loadFeed(0, function() {
-               done();
+              loadFeed(0, function() {
+                  done();
            });
          });
          it('Async loadFeed content changes', function(done) {
-           hamburgerMenu.addEventListener('click', function() {
-           i++;
-           });
-           content[i] = feedcontainer.firstElementChild;
-           expect(content[i]).not.toBe(content[i-1]);
-           done();
+             hamburgerMenu.addEventListener('click', function() {
+             i++;
+             });
+             content[i] = feedcontainer.firstElementChild;
+             expect(content[i]).not.toBe(content[i-1]);
+             done();
          });
     });
 }());
