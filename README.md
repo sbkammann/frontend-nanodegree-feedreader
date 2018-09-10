@@ -17,6 +17,8 @@ The third test suite is named "Initial Entries".
 The last test suite is called "New Feed Selection".
 The test 'Async loadFeed content changes' ensures when a new feed is loaded by the loadFeed function that the content actually changes.
 
-### Acknowledgments
+## How to get started
+Open index.html in a browser.
 
+### Acknowledgments
 The descriptions of the tests were adapted from the instructions provided by the Udacity team. Comments in the code were also only slightly modified. All files except the modifications I made to feedreader.js were provided by Udacity.   

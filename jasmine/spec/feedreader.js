@@ -20,23 +20,23 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-         it('URL defined', function() {
-             allFeeds.forEach(function(val) {
-                 expect(val.url).toBeDefined();
-                 expect(val.url).not.toBe(0);
-             });
-         });
+        it('URL defined', function() {
+            allFeeds.forEach(function(val) {
+                expect(val.url).toBeDefined();
+                expect(val.url.length).not.toBe(0);
+            });
+        });
 
         /* loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
-         it('name defined', function() {
-             allFeeds.forEach(function(val) {
-                 expect(val.name).toBeDefined();
-                 expect(val.name).not.toBe(0);
-             });
-         });
+        it('name defined', function() {
+            allFeeds.forEach(function(val) {
+                expect(val.name).toBeDefined();
+                expect(val.name.length).not.toBe(0);
+            });
+        });
     });
 
     /* test suite named "The menu" */
@@ -48,29 +48,34 @@ $(function() {
          * gives away exactly what it does?
          */
 
-         it('element hidden', function() {
-             const menuHidden = document.querySelector('body');
-             expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
-         });
+        it('element hidden', function() {
+            const menuHidden = document.querySelector('body');
+            const classArray = menuHidden.getAttribute('class').split(" ");
+            let hiddenClass;
+            classArray.forEach(function(a) {
+                if (a === 'menu-hidden') {
+                    hiddenClass = a;
+                }
+            });
+            expect(hiddenClass).toBe('menu-hidden');
+        });
 
          /* test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * has two expectations: does the menu display when
           * clicked and does it hide when clicked again.
+          https://www.w3schools.com/jsref/met_html_click.asp
+          same fragility as above
           */
-          it('element visible when clicked, disappears when clicked again', function() {
-              const menuHidden = document.querySelector('body');
-              let clicked = 1;
-              menuHidden.addEventListener('click', function() {
-                  clicked++;
-              });
-              if (clicked % 2 === 0) {
-                  expect(menuHidden.getAttribute('class')).not.toBe('menu-hidden');
-              }
-              else {
-                  expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
-              }
-          })
+        it('element visible when clicked, disappears when clicked again', function() {
+            const menuHidden = document.querySelector('body');
+            const icon = document.querySelector('i');
+
+            icon.click();
+            expect(menuHidden.getAttribute('class')).not.toBe('menu-hidden');
+            icon.click();
+            expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
+        });
     });
     /* test suite named "Initial Entries" */
     describe('Initial Entries', function() {
@@ -80,18 +85,25 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-         const feedcontainer = document.querySelector('.feed');
-         const entry = feedcontainer.firstElementChild;
+        const feedcontainer = document.querySelector('.feed').children;
+        let entry;
 
-         beforeEach(function(done) {
-              loadFeed(0, function() {
-                    done();
-              });
-         });
-         it('Async loadFeed has at least one entry', function(done) {
-              expect(entry).toBeDefined();
-              done();
-         });
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+        it('Async loadFeed has at least one entry', function(done) {
+            for (let i=0; i<feedcontainer.length; i++){
+                if (feedcontainer[i].getAttribute('class') === 'entry-link') {
+                    entry = feedcontainer[i];
+                    break;
+                }
+            }
+            expect(entry.getAttribute('class')).toBe('entry-link');
+            done();
+        });
 
     });
     /* test suite named "New Feed Selection" */
@@ -100,24 +112,22 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-         const feedcontainer = document.querySelector('.feed');
-         const hamburgerMenu = document.querySelector('.icon-list');
-         let content = [];
-         content[0] = feedcontainer.firstElementChild;
-         let i = 0;
+        let a;
+        let b;
 
-         beforeEach(function(done) {
-              loadFeed(0, function() {
-                  done();
-           });
-         });
-         it('Async loadFeed content changes', function(done) {
-             hamburgerMenu.addEventListener('click', function() {
-             i++;
-             });
-             content[i] = feedcontainer.firstElementChild;
-             expect(content[i]).not.toBe(content[i-1]);
-             done();
-         });
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                a = document.querySelector('.feed').firstElementChild;
+                loadFeed(1, function() {
+                    b = document.querySelector('.feed').firstElementChild;
+                    done();
+                });
+            });
+        });
+
+        it('Async loadFeed content changes', function(done) {
+            expect(a.getAttribute('href')).not.toBe(b.getAttribute('href'));
+            done();
+        });
     });
 }());
