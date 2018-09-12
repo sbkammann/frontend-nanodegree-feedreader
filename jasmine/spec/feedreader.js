@@ -21,9 +21,9 @@ $(function() {
          * and that the URL is not empty.
          */
         it('URL defined', function() {
-            allFeeds.forEach(function(val) {
-                expect(val.url).toBeDefined();
-                expect(val.url.length).not.toBe(0);
+            allFeeds.forEach(function(feed) {
+                expect(feed.url).toBeDefined();
+                expect(feed.url.length).not.toBe(0);
             });
         });
 
@@ -32,9 +32,9 @@ $(function() {
          * and that the name is not empty.
          */
         it('name defined', function() {
-            allFeeds.forEach(function(val) {
-                expect(val.name).toBeDefined();
-                expect(val.name.length).not.toBe(0);
+            allFeeds.forEach(function(feed) {
+                expect(feed.name).toBeDefined();
+                expect(feed.name.length).not.toBe(0);
             });
         });
     });
@@ -68,13 +68,15 @@ $(function() {
           same fragility as above
           */
         it('element visible when clicked, disappears when clicked again', function() {
-            const menuHidden = document.querySelector('body');
+
             const icon = document.querySelector('i');
 
             icon.click();
-            expect(menuHidden.getAttribute('class')).not.toBe('menu-hidden');
+            let menuHidden = document.querySelector('body').classList.contains('menu-hidden');
+            expect(menuHidden).toBe(false);
             icon.click();
-            expect(menuHidden.getAttribute('class')).toBe('menu-hidden');
+            menuHidden = document.querySelector('body').classList.contains('menu-hidden');
+            expect(menuHidden).toBe(true);
         });
     });
     /* test suite named "Initial Entries" */
@@ -95,13 +97,8 @@ $(function() {
             });
         });
         it('Async loadFeed has at least one entry', function(done) {
-            for (let i=0; i<feedcontainer.length; i++){
-                if (feedcontainer[i].getAttribute('class') === 'entry-link') {
-                    entry = feedcontainer[i];
-                    break;
-                }
-            }
-            expect(entry.getAttribute('class')).toBe('entry-link');
+            const feedEntries = document.querySelector('.feed').querySelectorAll('.entry');
+            expect(feedEntries.length).toBeGreaterThan(0);
             done();
         });
 
